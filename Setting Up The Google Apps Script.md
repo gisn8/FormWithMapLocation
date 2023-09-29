@@ -1,6 +1,6 @@
 First, create a new Google Sheets document and then open Google Apps Script by going to Extensions -> Apps Script.
 
-Copy the contents of the gScript.js.template and paste it into the Apps Script editor.
+Copy the contents of the gScript.js.template (also shown below) and paste it into the Apps Script editor.
 
 ```
 function doPost(e) {
