@@ -14,13 +14,14 @@ This project showcases how to build a map-based form using Leaflet.js and Google
 
 ## Installation
 1. Download the files
-2. Open the HTML file in a web browser or deploy it on a server to test the form.
+2. Follow the instructions on Setting Up The Google Apps Script
+3. Open the HTML file in a web browser.
 
 ## How to Use
 1. Pin a location on the map.
 2. Fill out the questionnaire.
 3. Click 'Submit' to save your response.
-4. The data will be saved in a Google Sheet, and a thank-you message will appear.
+4. The data will be saved in a Google Sheet, and a thank-you message will appear with the option to submit another response.
 
 ## Technologies Used
 * HTML5
