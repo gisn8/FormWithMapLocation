@@ -1,0 +1,15 @@
+function doPost(e) {
+  var sheet = SpreadsheetApp.openById('GOOGLE SHEET ID').getActiveSheet();
+  var newRow = sheet.getLastRow() + 1;
+  
+  var rowData = [];
+  rowData.push(new Date()); // Timestamp
+  rowData.push(e.parameter.home);
+  rowData.push(e.parameter.name);
+  rowData.push(e.parameter.age);
+  rowData.push(e.parameter.description);
+  rowData.push(e.parameter.latitude);
+  rowData.push(e.parameter.longitude);
+  
+  sheet.getRange(newRow, 1, 1, rowData.length).setValues([rowData]);
+}
