@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>You Saw A Cat?! Where?!</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <style>
+        /* Your styles here */
+        h1, h2 {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #f4e542;
+            color: #333;
+        }
+        form {
+            margin: 20px;
+            background-color: #ffe6cc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        label {
+            font-weight: bold;
+        }
+        .form-description {
+            font-style: italic;
+            font-size: smaller;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body>
+    <!-- Form page -->
+    <div id="formContainer">
+        <h1>You Saw A Cat?! Where?!</h1>
+        <h2>Tell us about it!</h2>
+        <div id="map" style="height: 400px;"></div>
+        <!-- Custom Form -->
+        <form id="catForm">
+            <label for="home">Home:</label>
+            <div class="form-description">Do you know if it has a home or not?</div>
+            <select id="home" name="home">
+                <option>Domestic</option>
+                <option>Outdoor</option>
+                <option>Both</option>
+                <option>Uncertain</option>
+            </select><br><br>
+
+            <label for="name">Name:</label>
+            <div class="form-description">Do you know the cat's name, or what do you call it?</div>
+            <input type="text" id="name" name="name"><br><br>
+
+            <label for="age">Age:</label>
+            <select id="age" name="age">
+                <option>Kitten</option>
+                <option>Adolescent</option>
+                <option>Adult</option>
+                <option>Senior</option>
+            </select><br><br>
+
+            <label for="description">Description:</label>
+            <div class="form-description">What did the cat look like?</div>
+            <textarea id="description" name="description"></textarea><br><br>
+
+            <!-- <label for="latitude">Latitude:</label>
+            <input type="text" id="latitude" name="latitude" readonly><br><br>
+
+            <label for="longitude">Longitude:</label>
+            <input type="text" id="longitude" name="longitude" readonly><br><br> -->
+
+            <input type="button" value="Submit" id="submitButton">
+        </form>
+    </div>
+
+    <!-- Thank you page -->
+    <div id="thankYouPage" style="display:none;">
+        <h1>Thank you for your submission!</h1>
+        <button id="anotherSubmission">Make Another Submission</button>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize the map
+            var map = L.map('map').setView([37.7749, -122.4194], 13);
+
+            // Add a tile layer to the map
+            L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {}).addTo(map);
+
+            var marker;
+
+            // Listen for a click event on the map
+            map.on('click', function(e) {
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+                marker = L.marker(e.latlng).addTo(map);
+                latitude = e.latlng.lat;
+                longitude = e.latlng.lng;
+            });
+        });
+
+        // Function to open Google Form with prefilled answers
+        document.getElementById("submitButton").addEventListener("click", function() {
+            // Listen for form submission or button click
+            // Capture the form field values
+            var home = document.getElementById("home").value;
+            var name = document.getElementById("name").value;
+            var age = document.getElementById("age").value;
+            var description = document.getElementById("description").value;
+            // var latitude = document.getElementById("latitude").value;
+            // var longitude = document.getElementById("longitude").value;
+
+            // Logging it for now, here you can send it to Google Forms
+            console.log(`Home: ${home}, Name: ${name}, Age: ${age}, Description: ${description}, Latitude: ${latitude}, Longitude: ${longitude}`);
+            
+            var data = {
+                home: home, 
+                name: name, 
+                age: age, 
+                description: description, 
+                latitude: latitude, 
+                longitude: longitude
+            }
+
+            console.log(data)
+
+            // POST data to Google Apps Script web app
+            fetch(gScriptUrl, {
+              method: 'POST',
+              mode: 'no-cors',
+              cache: 'no-cache',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: new URLSearchParams(data).toString()
+            }).then(response => {
+              console.log('Data sent:', response);
+            }).catch((error) => {
+              console.error('Error:', error);
+            });
+
+        });
+    </script>
+    
+    <script>
+        // Hide the form and show the thank-you page
+        function showThankYouPage() {
+          document.getElementById("formContainer").style.display = "none";
+          document.getElementById("thankYouPage").style.display = "block";
+        }
+
+        // Show the form and hide the thank-you page, also clear the form
+        function showFormAgain() {
+          document.getElementById("formContainer").style.display = "block";
+          document.getElementById("thankYouPage").style.display = "none";
+          
+          // Optional: clear the form fields if you want
+          document.getElementById("catForm").reset();
+        }
+
+        // Listen for form submission or button click
+        document.getElementById("submitButton").addEventListener("click", function() {
+          // Your existing code to capture and send form responses
+          // ...
+
+          // Then, show the thank-you page
+          showThankYouPage();
+        });
+
+        // Listen for the "Make Another Submission" button click
+        document.getElementById("anotherSubmission").addEventListener("click", function() {
+          showFormAgain();
+        });
+
+    </script>
+
+
+
+</body>
+</html>
