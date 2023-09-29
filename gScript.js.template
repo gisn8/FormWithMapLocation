@@ -1,5 +1,5 @@
 function doPost(e) {
-  var sheet = SpreadsheetApp.openById('GOOGLE SHEET ID').getActiveSheet();
+  var sheet = SpreadsheetApp.openById('YOUR_SPREADSHEET_ID_HERE').getActiveSheet();
   var newRow = sheet.getLastRow() + 1;
   
   var rowData = [];
