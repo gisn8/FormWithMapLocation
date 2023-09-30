@@ -95,8 +95,32 @@
                     map.removeLayer(marker);
                 }
                 marker = L.marker(e.latlng).addTo(map);
-                latitude = e.latlng.lat;
-                longitude = e.latlng.lng;
+                // Get zoom level
+                var zoomLevel = map.getZoom();
+
+                // Setting the number of decimal points for coordinates as the default 15 is at the atomic-level.
+                // Approximately based on https://xkcd.com/2170/
+                var decimalPlaces;
+                if (zoomLevel <= 3) {
+                    decimalPlaces = 0;
+                } else if (zoomLevel <= 5) { // Too far to distinguish cities
+                    decimalPlaces = 1;
+                } else if (zoomLevel <= 13) { // City level +
+                    decimalPlaces = 2;
+                } else if (zoomLevel <= 15) { // Neighborhood level +
+                    decimalPlaces = 3;
+                } else if (zoomLevel <= 17) { // Cul du sac level +
+                    decimalPlaces = 4;
+                } else if (zoomLevel = 18) { // Corner of house level +
+                    decimalPlaces = 5;
+                } else {
+                    decimalPlaces = 15;
+                }
+
+                latitude = e.latlng.lat.toFixed(decimalPlaces);
+                longitude = e.latlng.lng.toFixed(decimalPlaces);
+
+                console.log(`Zoom: ${zoomLevel}\nLatitude: ${latitude}\nLongitude: ${longitude}`)
             });
         });
 
